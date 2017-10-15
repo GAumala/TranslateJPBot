@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Text.XML.JMdictParser (parseJMdictFile, Entry (Entry)) where
+module Text.XML.JMdictParser (parseJMdictFile, JMdictEntry (JMdictEntry)) where
 
 import Data.Maybe
 
@@ -10,17 +10,11 @@ import Data.Text (Text, unpack, concat)
 import Data.XML.Types (Event)
 import Text.XML.Stream.Parse
 
-type KanjiElements = [Text]
-
-type ReadingElements = [Text]
-
-type SenseElements = [Text]
-
-data Entry = Entry {
+data JMdictEntry = JMdictEntry {
   entryId :: Int,
-  readingElement :: ReadingElements,
-  senseElement :: SenseElements,
-  kanjiElement :: KanjiElements
+  kanjiElements :: [Text],
+  readingElements :: [Text],
+  senseElements :: [Text]
 } deriving Show
 
 parseKanjiElement :: MonadThrow m => Consumer Event m (Maybe Text)
@@ -53,16 +47,18 @@ parseSenseElement = tag' "sense" ignoreAttrs $ \ () -> do
   many $ ignoreTreeContent "dial"
   many $ tagNoAttr "gloss" content
 
-parseEntry :: MonadThrow m => Consumer Event m (Maybe Entry)
+parseEntry :: MonadThrow m => Consumer Event m (Maybe JMdictEntry)
 parseEntry = tag' "entry" ignoreAttrs $ \ () -> do
   entryId <- force "ent_seq is required" (tagNoAttr "ent_seq" content)
-  kanjiElement <- many parseKanjiElement
-  readingElement <- many parseReadingElement
-  senseElement <- many parseSenseElement
-  return $ Entry (read $ unpack entryId) kanjiElement readingElement
-                 (Prelude.concat senseElement)
+  parsedKanjiElements <- many parseKanjiElement
+  parsedReadingElements <- many parseReadingElement
+  parsedSenseElements <- many parseSenseElement
+  return $ JMdictEntry (read $ unpack entryId)
+                 parsedKanjiElements
+                 parsedReadingElements
+                 (Prelude.concat parsedSenseElements)
 
-parseJMdictFile :: String -> IO [Entry]
+parseJMdictFile :: String -> IO [JMdictEntry]
 parseJMdictFile jmdictFileName = runConduitRes
                                $ parseFile def jmdictFileName
                                .| force "JMdict required" parseJMdict
