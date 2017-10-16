@@ -1,4 +1,6 @@
+import Data.Default
 import Data.JMdictEntryTree
+import Network.Wai.Middleware.RequestLogger
 import Web.JPBotScottyServer
 import Web.Scotty
 
@@ -7,4 +9,7 @@ main = do
   putStrLn "Constructing tree..."
   tree <- jmdictEntryTreeFromFile "JMdict_e.xml"
   putStrLn "Starting server..."
-  scotty 4000 (routes telegramSecretToken tree)
+  logger <- mkRequestLogger def { outputFormat = Apache FromHeader }
+  scotty 4000 $ do
+    middleware logger
+    routes telegramSecretToken tree
