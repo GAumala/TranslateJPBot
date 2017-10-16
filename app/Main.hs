@@ -1,3 +1,10 @@
-import Text.XML.JMdictParser
+import Data.JMdictEntryTree
+import Web.JPBotScottyServer
+import Web.Scotty
 
-main = parseJMdictFile "JMdict_e.xml" >>= print
+main = do
+  let telegramSecretToken = "MYTOKEN"
+  putStrLn "Constructing tree..."
+  tree <- jmdictEntryTreeFromFile "JMdict_e.xml"
+  putStrLn "Starting server..."
+  scotty 4000 (routes telegramSecretToken tree)

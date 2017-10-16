@@ -10,4 +10,3 @@ spec =
       entries <- parseJMdictFile "JMdict_e.xml"
 
       entries `shouldSatisfy` (> 0) . length
-      print $ length entries

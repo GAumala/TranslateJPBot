@@ -2,8 +2,9 @@
 
 module Data.JMdictEntryTree (EntryNode,
 jmdictEntryTreeFromFile,
-lookupEntry,
-printLookup) where
+lookupWord,
+printLookup,
+showLookupResult) where
 
 import Text.XML.JMdictParser
 
@@ -58,13 +59,17 @@ jmdictEntryTreeFromFile filename = do
   entries <- parseJMdictFile filename
   return $ foldl' insertEntryToTree emptyRedBlackTree entries
 
-lookupEntry :: RedBlackTree EntryNode -> Text -> Maybe EntryNode
-lookupEntry tree queryString = Data.RedBlackTree.find tree targetNode
-  where targetNode = EntryNode queryString (JMdictEntry 0 [] [] []) []
+lookupWord :: RedBlackTree EntryNode -> Text -> Maybe EntryNode
+lookupWord tree word = Data.RedBlackTree.find tree targetNode
+  where targetNode = EntryNode word (JMdictEntry 0 [] [] []) []
+
+showLookupResult :: Text -> Maybe EntryNode -> Text
+showLookupResult requestedWord lookupResult =
+  fromMaybe notFoundMsg lookupResultText
+  where notFoundMsg = T.concat [ "No entries match \"", requestedWord, "\"" ]
+        lookupResultText = fmap showEntryNodeAsText lookupResult
 
 printLookup :: RedBlackTree EntryNode -> String -> IO ()
 printLookup tree queryString = TextIO.putStrLn queryResult
   where queryText = T.pack queryString
-        notFoundMsg = T.concat [ "No entries match \"", queryText, "\"" ]
-        lookupResult = fmap showEntryNodeAsText (lookupEntry tree queryText)
-        queryResult = fromMaybe notFoundMsg lookupResult
+        queryResult = showLookupResult queryText (lookupWord tree queryText)
