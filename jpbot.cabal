@@ -18,7 +18,7 @@ library
   exposed-modules:     Data.JMdictEntryTree
                      , Data.Telegram.Chat
                      , Data.Telegram.Message
-                     , Data.Telegram.Payload
+                     , Data.Telegram.Update
                      , Data.Telegram.WebhookResponse
                      , Text.XML.JMdictParser
                      , Web.JPBotScottyServer

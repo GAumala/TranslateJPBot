@@ -6,7 +6,7 @@ import Data.JMdictEntryTree (EntryNode, lookupWord, showLookupResult)
 import Data.RedBlackTree
 import Data.Telegram.Chat
 import Data.Telegram.Message
-import Data.Telegram.Payload
+import Data.Telegram.Update
 import Data.Telegram.WebhookResponse
 import Data.Text (Text)
 
@@ -29,10 +29,10 @@ translationTelegramResponse :: Int -> Text -> WebhookResponse
 translationTelegramResponse chatId translatedText =
   WebhookResponse "sendMessage" chatId translatedText "Markdown"
 
-createResponseFromPayload :: RedBlackTree EntryNode -> Payload ->
+createResponseFromPayload :: RedBlackTree EntryNode -> Update ->
   Maybe WebhookResponse
-createResponseFromPayload wordTree payload =
+createResponseFromPayload wordTree update =
   translationTelegramResponse <$> chatId <*> translation
-  where receivedMessage = message payload
+  where receivedMessage = message update
         translation = translateReceivedMessage wordTree receivedMessage
-        chatId = fmap getChatIdFromMessage (message payload)
+        chatId = fmap getChatIdFromMessage (message update)

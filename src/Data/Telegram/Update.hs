@@ -1,15 +1,15 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Data.Telegram.Payload (Payload (Payload), message) where
+module Data.Telegram.Update (Update (Update), message) where
 
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Telegram.Message
 import GHC.Generics
 
-data Payload = Payload {
+data Update = Update {
   update_id :: Int,
   message :: Maybe Message
 } deriving (Show, Eq, Generic)
 
-instance ToJSON Payload
-instance FromJSON Payload
+instance ToJSON Update
+instance FromJSON Update
