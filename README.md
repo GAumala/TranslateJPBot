@@ -1,8 +1,8 @@
 # Translate JP Bot
 
-Chat bot that translates Japanese words into English using JMdict.
+Chat bot that translates Japanese words into English using [JMdict](http://edrdg.org/jmdict/j_jmdict.html).
 
-You can talk to the bot right now with Telegram[https://telegram.org/] The bot's handle is @TranslateJPBot. The bot will try to translate any text that you send to it.
+You can talk to the bot right now with [Telegram](https://telegram.org/) The bot's handle is @TranslateJPBot. The bot will try to translate any text that you send to it.
 
 ![screenshot](https://user-images.githubusercontent.com/5729175/31618760-70f4b0c8-b258-11e7-86d3-25b3623d1024.jpeg)
 
