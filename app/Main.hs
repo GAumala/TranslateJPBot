@@ -1,11 +1,14 @@
 import Data.Default
 import Data.JMdictEntryTree
+import Data.Maybe (fromMaybe)
 import Network.Wai.Middleware.RequestLogger
+import System.Environment (lookupEnv)
 import Web.JPBotScottyServer
 import Web.Scotty
 
 main = do
-  let telegramSecretToken = "MYTOKEN"
+
+  telegramSecretToken <- fmap (fromMaybe "NOTOKEN") (lookupEnv "TELEGRAM_TOKEN")
   putStrLn "Constructing tree..."
   tree <- jmdictEntryTreeFromFile "JMdict_e.xml"
   putStrLn "Starting server..."
