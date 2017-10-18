@@ -39,4 +39,5 @@ install:
 script:
 # Build the package, its tests, and its docs and run the tests
 # Use travis_wait because building the tree can take a long time
-- travis_wait 30 stack --no-terminal test
+- stack build
+- stack test
