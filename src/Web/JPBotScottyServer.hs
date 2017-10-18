@@ -23,4 +23,4 @@ maybeSendTelegramResponse (Just response) = json response
 routes :: String -> RedBlackTree EntryNode -> ScottyM ()
 routes secretToken tree = post telegramWebhookPath (translateWord tree)
   -- Web hook path is just /<TELEGRAM_SECRET_TOKEN> 
-  where telegramWebhookPath = literal $ "/" ++ secretToken
+  where telegramWebhookPath = literal $ "/telegram/" ++ secretToken

@@ -46,16 +46,16 @@ server {
  
                # Existing configuration...
 
-+               location ^~ /path/to/bot/ {
++               location ^~ /telegram/ {
 +                       proxy_pass http://localhost:4000;
 +               }
         }
 ```
 
-After that, you need to register a webhook to the Telegram API. It is encouraged to use the secret token as part of the webhook URL to avoid malicious attackers to try to talk to your bot. To register the url just use `curl`
+After that, you need to register a webhook to the Telegram API. We use the secret token as part of the webhook URL to avoid malicious attackers to try to talk to the bot. To register the url just use `curl`
 
 ``` bash
-curl -F “url=https://<YOURDOMAIN.EXAMPLE>/path/to/bot/<MY_SECRET_TOKEN>" https://api.telegram.org/bot<MY_SECRET_TOKEN>/setWebhook
+curl -F “url=https://<YOURDOMAIN.EXAMPLE>/telegram/<MY_SECRET_TOKEN>" https://api.telegram.org/bot<MY_SECRET_TOKEN>/setWebhook
 ```
 
 That's it! You're done! If you want to test that the server is running correctly you can modify `test/serverTests.sh` to point to your server and run the tests.
@@ -63,8 +63,8 @@ That's it! You're done! If you want to test that the server is running correctly
 ``` diff
 token=$(printenv TELEGRAM_TOKEN)
 -host=http://localhost:4000
-+host=https://<YOURDOMAIN.EXAMPLE>/path/to/bot
-url=$host/$token
++host=https://<YOURDOMAIN.EXAMPLE>
+url=$host/telegram/$token
 ```
 
 If you see status 200 on each request, then the bot is running correctly.

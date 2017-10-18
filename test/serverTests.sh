@@ -9,7 +9,7 @@
 
 token=$(printenv TELEGRAM_TOKEN)
 host=http://localhost:4000
-url=$host/$token
+url=$host/telegram/$token
 
 echo $url
 test_update_payload_with_text() {
