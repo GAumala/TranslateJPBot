@@ -39,15 +39,15 @@ TELEGRAM_TOKEN=<MY_SECRET_TOKEN> stack exec bot
 
 If you already have an nginx server setup with SSL, you can easily deploy the bot by adding a new `location` to your existing `server` block. 
 
-``` conf
+``` diff
 # /etc/nginx/nginx.conf
 
 server {
  
                # Existing configuration...
 
-+               location ^~ /telegram/ {
-+                       proxy_pass http://localhost:4000/path/to/bot/;
++               location ^~ /path/to/bot/ {
++                       proxy_pass http://localhost:4000;
 +               }
         }
 ```
@@ -63,7 +63,7 @@ That's it! You're done! If you want to test that the server is running correctly
 ``` diff
 token=$(printenv TELEGRAM_TOKEN)
 -host=http://localhost:4000
-+host==https://<YOURDOMAIN.EXAMPLE>/path/to/bot
++host=https://<YOURDOMAIN.EXAMPLE>/path/to/bot
 url=$host/$token
 ```
 
