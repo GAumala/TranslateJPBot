@@ -34,3 +34,40 @@ Run the server with:
 ``` bash
 TELEGRAM_TOKEN=<MY_SECRET_TOKEN> stack exec bot
 ```
+
+## Deploy
+
+If you already have an nginx server setup with SSL, you can easily deploy the bot by adding a new `location` to your existing `server` block. 
+
+``` conf
+# /etc/nginx/nginx.conf
+
+server {
+ 
+               # Existing configuration...
+
++               location ^~ /telegram/ {
++                       proxy_pass http://localhost:4000/path/to/bot/;
++               }
+        }
+```
+
+After that, you need to register a webhook to the Telegram API. It is encouraged to use the secret token as part of the webhook URL to avoid malicious attackers to try to talk to your bot. To register the url just use `curl`
+
+``` bash
+curl -F “url=https://<YOURDOMAIN.EXAMPLE>/path/to/bot/<MY_SECRET_TOKEN>" https://api.telegram.org/bot<MY_SECRET_TOKEN>/setWebhook
+```
+
+That's it! You're done! If you want to test that the server is running correctly you can modify `test/serverTests.sh` to point to your server and run the tests.
+
+``` diff
+token=$(printenv TELEGRAM_TOKEN)
+-host=http://localhost:4000
++host==https://<YOURDOMAIN.EXAMPLE>/path/to/bot
+url=$host/$token
+```
+
+If you see status 200 on each request, then the bot is running correctly.
+
+
+
