@@ -46,7 +46,7 @@ server {
  
                # Existing configuration...
 
-+               location ^~ /telegram/ {
++               location /telegram/ {
 +                       proxy_pass http://localhost:4000;
 +               }
         }
