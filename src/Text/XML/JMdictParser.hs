@@ -45,7 +45,7 @@ parseSenseElement = tag' "sense" ignoreAttrs $ \ () -> do
   many $ ignoreTreeContent "s_inf"
   many $ ignoreTreeContent "lsource"
   many $ ignoreTreeContent "dial"
-  many $ tagNoAttr "gloss" content
+  many $ tagIgnoreAttrs "gloss" content
 
 parseEntry :: MonadThrow m => Consumer Event m (Maybe JMdictEntry)
 parseEntry = tag' "entry" ignoreAttrs $ \ () -> do
